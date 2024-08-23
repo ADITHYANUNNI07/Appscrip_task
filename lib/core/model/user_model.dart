@@ -26,6 +26,13 @@ class UserModel {
   }
 
   bool get isValid {
-    return emailError == '' && passwordError == '';
+    return emailError == null && passwordError == null;
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'email': email,
+      'password': password,
+    };
   }
 }

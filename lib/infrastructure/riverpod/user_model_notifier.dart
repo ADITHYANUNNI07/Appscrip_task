@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class UserModelNotifier extends StateNotifier<UserModel> {
   UserModelNotifier() : super(UserModel(email: '', password: ''));
+  void clearUserModel() {
+    state = UserModel(email: '', password: '');
+  }
 
   void updateEmail(String email) {
     String? error;

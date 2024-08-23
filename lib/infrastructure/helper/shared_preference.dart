@@ -14,12 +14,7 @@ final accessTokenProvider = Provider<String?>((ref) {
     error: (error, stack) => null,
   );
 });
-
-final userUidProvider = Provider<String?>((ref) {
-  final asyncPrefs = ref.watch(sharedPreferencesProvider);
-  return asyncPrefs.when(
-    data: (prefs) => prefs.getString('USERUID'),
-    loading: () => null,
-    error: (error, stack) => null,
-  );
-});
+Future<void> setAccessToken(WidgetRef ref, String token) async {
+  final prefs = await ref.read(sharedPreferencesProvider.future);
+  await prefs.setString('ACCESSTOKEN', token);
+}
