@@ -108,6 +108,7 @@ class RegisterScrn extends ConsumerWidget {
                   Align(
                     child: InkWell(
                       onTap: () {
+                        ref.read(userModelProvider.notifier).clearUserModel();
                         NavigationHandler.navigateOff(
                             context, const LoginScrn());
                       },

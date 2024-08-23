@@ -13,7 +13,20 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> signup(UserModel userModel, WidgetRef ref) async {
     state = AuthState.loading;
 
-    final result = await authRepo.signup(userModel);
+    final result = await authRepo.signup(userModel, ref);
+    if (result == 'success') {
+      state = AuthState.success;
+    } else {
+      log(result);
+      ref.read(authErrorProvider.notifier).state = result;
+      state = AuthState.error;
+    }
+  }
+
+  Future<void> login(UserModel userModel, WidgetRef ref) async {
+    state = AuthState.loading;
+
+    final result = await authRepo.login(userModel, ref);
     if (result == 'success') {
       state = AuthState.success;
     } else {
