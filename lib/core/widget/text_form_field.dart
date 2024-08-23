@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:task_manager/core/constant/constant.dart';
 import 'package:task_manager/core/utils/color/color.dart';
 
 class TextFormWidget extends StatelessWidget {
@@ -18,6 +19,9 @@ class TextFormWidget extends StatelessWidget {
     this.suffixIconColor,
     this.isPassword = false,
     this.errorText,
+    this.maxLength,
+    this.maxLines,
+    this.isNolabel = false,
   });
 
   final String label;
@@ -33,43 +37,65 @@ class TextFormWidget extends StatelessWidget {
   final Color? suffixIconColor;
   final TextInputType? keyboardType;
   final bool isPassword;
+  final int? maxLength;
+  final int? maxLines;
+  final bool isNolabel;
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      keyboardType: keyboardType,
-      style: const TextStyle(color: colorBlack),
-      onChanged: onChanged,
-      obscureText: isPassword,
-      controller: controller,
-      decoration: InputDecoration(
-        errorText: errorText,
-        filled: true,
-        fillColor: colorWhite,
-        suffixIcon: IconButton(
-          onPressed: suffixOnpress,
-          icon: FaIcon(
-            suffixicon,
-            color: suffixIconColor,
+    return Column(
+      children: [
+        !isNolabel ? sizedBox15H : Container(),
+        !isNolabel
+            ? Row(
+                children: [
+                  Text(
+                    label ?? '',
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.w600),
+                  ),
+                ],
+              )
+            : Container(),
+        !isNolabel ? sizedBox10H : Container(),
+        TextFormField(
+          maxLines: maxLines,
+          maxLength: maxLength,
+          keyboardType: keyboardType,
+          style: const TextStyle(color: colorBlack),
+          onChanged: onChanged,
+          obscureText: isPassword,
+          controller: controller,
+          decoration: InputDecoration(
+            errorText: errorText,
+            filled: true,
+            fillColor: colorWhite,
+            suffixIcon: IconButton(
+              onPressed: suffixOnpress,
+              icon: FaIcon(
+                suffixicon,
+                color: suffixIconColor,
+              ),
+            ),
+            prefixIcon: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FaIcon(icon),
+              ],
+            ),
+            labelText: label,
+            hintText: hintText,
+            focusedBorder: const OutlineInputBorder(
+              borderSide: BorderSide(
+                color: colorApp,
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+            ),
+            border: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5))),
           ),
+          validator: validator,
         ),
-        prefixIcon: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            FaIcon(icon),
-          ],
-        ),
-        labelText: label,
-        hintText: hintText,
-        focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(
-            color: colorApp,
-          ),
-          borderRadius: BorderRadius.all(Radius.circular(5)),
-        ),
-        border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(5))),
-      ),
-      validator: validator,
+      ],
     );
   }
 }

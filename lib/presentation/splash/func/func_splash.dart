@@ -24,12 +24,8 @@ void splashtime(BuildContext context, WidgetRef ref) async {
             );
           }
         },
-        loading: () {
-          // Handle loading state if needed
-        },
-        error: (error, stackTrace) {
-          // Handle error state if needed
-        },
+        loading: () {},
+        error: (error, stackTrace) {},
       );
     },
   );

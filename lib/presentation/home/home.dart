@@ -1,15 +1,15 @@
 import 'package:animated_segmented_tab_control/animated_segmented_tab_control.dart';
-import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:task_manager/core/constant/constant.dart';
 import 'package:task_manager/core/model/task_model.dart';
+import 'package:task_manager/core/routes/routes.dart';
 import 'package:task_manager/core/utils/color/color.dart';
-import 'package:task_manager/core/widget/text_form_field.dart';
 import 'package:task_manager/infrastructure/domain/demo/tast_state.dart';
 import 'package:task_manager/infrastructure/riverpod/task/task_provider.dart';
+import 'package:task_manager/presentation/form/form_screen.dart';
 
 class HomeScrn extends ConsumerStatefulWidget {
   const HomeScrn({super.key});
@@ -153,7 +153,9 @@ class _HomeScrnState extends ConsumerState<HomeScrn> {
                   ],
                 ),
                 floatingActionButton: FloatingActionButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    NavigationHandler.navigateTo(context, const FormScreen());
+                  },
                   backgroundColor: colorApp,
                   child: const FaIcon(
                     FontAwesomeIcons.folderPlus,
