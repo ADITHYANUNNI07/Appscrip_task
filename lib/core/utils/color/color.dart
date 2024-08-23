@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-const Color colorlightl = Color.fromARGB(255, 163, 186, 216);
-const Color colorlight = Color.fromARGB(255, 45, 64, 89);
+Color colorlight = const Color(0xFF7E57C2).withOpacity(0.1);
 const Color thirdColor = Color.fromARGB(255, 250, 130, 76);
 const Color colorDark = Color.fromARGB(255, 212, 211, 211);
 const Color fourthColor = Color(0XFF393939);
