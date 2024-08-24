@@ -48,17 +48,6 @@ class TaskModel {
             UserModel(id: -1, firstName: '', lastName: '', avatar: ''),
       );
     }
-    print({
-      'id': map['id'],
-      'title': map['title'],
-      'description': map['description'],
-      'date': map['duedate'] != null ? DateTime.parse(map['duedate']) : null,
-      'priority': map['priority'],
-      'status': map['status'],
-      'assignedUser': assignedUser,
-      'createAt':
-          map['createAt'] != null ? DateTime.parse(map['createAt']) : null,
-    });
     return TaskModel(
       id: map['id'],
       title: map['title'],

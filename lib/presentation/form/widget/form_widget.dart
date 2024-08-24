@@ -8,6 +8,7 @@ import 'package:task_manager/core/utils/color/color.dart';
 import 'package:task_manager/core/widget/date_picker.dart';
 import 'package:task_manager/infrastructure/riverpod/form/form_provider.dart';
 import 'package:task_manager/infrastructure/riverpod/task/task_provider.dart';
+import 'package:task_manager/presentation/todo/widget/widget.dart';
 
 class PriorityDropdown extends ConsumerWidget {
   const PriorityDropdown({super.key});
@@ -164,6 +165,7 @@ class UserDropdown extends ConsumerWidget {
 clearDropDown(WidgetRef ref) {
   ref.read(priorityProvider.state).state = null;
   ref.read(statusProvider.state).state = null;
+  ref.watch(completionStatusProvider.state).state = null;
   ref.read(taskFormProvider.notifier).updateAssignedUser(null);
   ref.read(taskFormProvider.notifier).clearModel();
   ref.read(dobProvider.state).state = null;

@@ -1,11 +1,15 @@
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:task_manager/core/constant/constant.dart';
 import 'package:task_manager/core/model/task_model.dart';
+import 'package:task_manager/core/routes/routes.dart';
 import 'package:task_manager/core/utils/color/color.dart';
 import 'package:task_manager/infrastructure/riverpod/task/task_provider.dart';
+import 'package:task_manager/presentation/form/form_screen.dart';
+import 'package:task_manager/presentation/form/widget/form_widget.dart';
 
 class TaskScrn extends ConsumerWidget {
   const TaskScrn({super.key});
@@ -46,6 +50,17 @@ class TaskScrn extends ConsumerWidget {
                     );
                   },
                 ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              clearDropDown(ref);
+              NavigationHandler.navigateTo(context, const FormScreen());
+            },
+            backgroundColor: colorApp,
+            child: const FaIcon(
+              FontAwesomeIcons.folderPlus,
+              color: colorWhite,
+            ),
+          ),
         ),
       ),
     );

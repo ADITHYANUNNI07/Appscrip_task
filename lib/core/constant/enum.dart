@@ -5,3 +5,5 @@ enum Priority { high, medium, low }
 enum Status { todo, inProgress, done }
 
 enum AuthState { initial, loading, success, error }
+
+enum CompletionStatus { complete, incomplete }

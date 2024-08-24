@@ -2,7 +2,7 @@ import 'package:task_manager/core/model/user_model.dart';
 
 class TodoModel {
   final int userId;
-  final int id;
+  final int? id;
   final String title;
   final bool completed;
   final UserModel? user;
@@ -10,7 +10,7 @@ class TodoModel {
   TodoModel({
     this.user,
     required this.userId,
-    required this.id,
+    this.id,
     required this.title,
     required this.completed,
   });

@@ -26,7 +26,7 @@ class FormScreen extends ConsumerWidget {
       child: SafeArea(
         child: Scaffold(
           appBar: AppBar(
-            title: const Text('Add Todo'),
+            title: const Text('Add Task'),
             centerTitle: true,
           ),
           body: Padding(

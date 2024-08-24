@@ -1,18 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:task_manager/infrastructure/domain/demo/tast_state.dart';
-import 'package:task_manager/infrastructure/domain/service/task/task_repo.dart';
+import 'package:task_manager/domain/demo/tast_state.dart';
+import 'package:task_manager/domain/service/todo/todo_repo.dart';
 
-final taskRepoProvider = Provider<TaskRepo>((ref) {
-  return TaskRepo();
+final TodoRepoProvider = Provider<TodoRepo>((ref) {
+  return TodoRepo();
 });
 
 class TodoNotifier extends StateNotifier<TodoState> {
-  final TaskRepo taskRepo;
-  TodoNotifier(this.taskRepo) : super(TodoState.initial());
+  final TodoRepo todoRepo;
+  TodoNotifier(this.todoRepo) : super(TodoState.initial());
 
   Future<void> getTodo(WidgetRef ref) async {
     state = TodoState.loading();
-    final result = await taskRepo.getTodo(ref);
+    final result = await todoRepo.getTodo(ref);
     if (result == null || result is String) {
       state = TodoState.error(result ?? '');
     } else {
@@ -23,6 +23,6 @@ class TodoNotifier extends StateNotifier<TodoState> {
 
 final todoNotifierProvider =
     StateNotifierProvider<TodoNotifier, TodoState>((ref) {
-  final taskRepo = ref.watch(taskRepoProvider);
-  return TodoNotifier(taskRepo);
+  final todo = ref.watch(TodoRepoProvider);
+  return TodoNotifier(todo);
 });

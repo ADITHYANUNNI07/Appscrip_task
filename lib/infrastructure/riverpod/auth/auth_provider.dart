@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:task_manager/core/constant/enum.dart';
 import 'package:task_manager/core/model/user_model.dart';
-import 'package:task_manager/infrastructure/domain/service/auth/auth_repo.dart';
+import 'package:task_manager/domain/service/auth/auth_repo.dart';
 
 class AuthNotifier extends StateNotifier<AuthState> {
   final AuthRepo authRepo;
