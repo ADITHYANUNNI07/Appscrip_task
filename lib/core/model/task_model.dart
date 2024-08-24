@@ -34,4 +34,16 @@ class TaskModel {
       assignedUser: assignedUser ?? this.assignedUser,
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'title': title,
+      'description': description,
+      'duedate': date!.toIso8601String(),
+      'priority': priority,
+      'status': status,
+      'userId': assignedUser!.id,
+      'createAt': DateTime.now().toIso8601String()
+    };
+  }
 }

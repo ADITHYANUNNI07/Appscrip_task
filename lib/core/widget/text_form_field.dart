@@ -58,7 +58,7 @@ class TextFormWidget extends StatelessWidget {
             : Container(),
         !isNolabel ? sizedBox10H : Container(),
         TextFormField(
-          maxLines: maxLines,
+          maxLines: maxLines ?? 1,
           maxLength: maxLength,
           keyboardType: keyboardType,
           style: const TextStyle(color: colorBlack),

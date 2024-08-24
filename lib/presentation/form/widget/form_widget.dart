@@ -5,6 +5,7 @@ import 'package:task_manager/core/constant/constant.dart';
 import 'package:task_manager/core/constant/enum.dart';
 import 'package:task_manager/core/model/user_model.dart';
 import 'package:task_manager/core/utils/color/color.dart';
+import 'package:task_manager/core/widget/date_picker.dart';
 import 'package:task_manager/infrastructure/riverpod/form/form_provider.dart';
 import 'package:task_manager/infrastructure/riverpod/task/task_provider.dart';
 
@@ -112,6 +113,7 @@ class UserDropdown extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userList = AppDevConfig.userList;
+    final assignedUser = ref.watch(taskFormProvider).assignedUser;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -126,7 +128,7 @@ class UserDropdown extends ConsumerWidget {
             labelText: 'Assign to User',
             border: OutlineInputBorder(),
           ),
-          value: ref.watch(taskFormProvider).assignedUser,
+          value: assignedUser,
           items: userList.map((UserModel user) {
             return DropdownMenuItem<UserModel>(
               value: user,
@@ -157,4 +159,12 @@ class UserDropdown extends ConsumerWidget {
       ],
     );
   }
+}
+
+clearDropDown(WidgetRef ref) {
+  ref.read(priorityProvider.state).state = null;
+  ref.read(statusProvider.state).state = null;
+  ref.read(taskFormProvider.notifier).updateAssignedUser(null);
+  ref.read(taskFormProvider.notifier).clearModel();
+  ref.read(dobProvider.state).state = null;
 }

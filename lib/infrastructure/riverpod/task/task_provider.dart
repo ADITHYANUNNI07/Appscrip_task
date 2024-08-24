@@ -4,8 +4,16 @@ import 'package:task_manager/core/model/user_model.dart';
 
 class TaskFormNotifier extends StateNotifier<TaskModel> {
   TaskFormNotifier()
-      : super(TaskModel(
-            title: '', description: '', priority: 'Low', status: 'To-Do'));
+      : super(TaskModel(title: '', description: '', priority: '', status: ''));
+  void clearModel() {
+    state = state.copyWith(
+        title: '',
+        description: '',
+        priority: '',
+        status: '',
+        assignedUser: null,
+        date: null);
+  }
 
   void updateTitle(String title) {
     state = state.copyWith(title: title);
@@ -27,7 +35,7 @@ class TaskFormNotifier extends StateNotifier<TaskModel> {
     state = state.copyWith(status: status);
   }
 
-  void updateAssignedUser(UserModel user) {
+  void updateAssignedUser(UserModel? user) {
     state = state.copyWith(assignedUser: user);
   }
 

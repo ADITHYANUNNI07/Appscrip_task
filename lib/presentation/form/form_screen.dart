@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:task_manager/core/constant/constant.dart';
+import 'package:task_manager/core/notification/notification.dart';
+import 'package:task_manager/core/routes/routes.dart';
 import 'package:task_manager/core/utils/color/color.dart';
 import 'package:task_manager/core/widget/date_picker.dart';
 import 'package:task_manager/core/widget/elevated_btn.dart';
 import 'package:task_manager/core/widget/text_form_field.dart';
+import 'package:task_manager/db/database_sqflite.dart';
 import 'package:task_manager/infrastructure/riverpod/task/task_provider.dart';
 import 'package:task_manager/presentation/form/widget/form_widget.dart';
 
@@ -58,15 +61,16 @@ class FormScreen extends ConsumerWidget {
                   const UserDropdown(),
                   sizedBox15H,
                   ElevatedBtnWidget(
-                    onPressed: () {
+                    onPressed: () async {
                       if (formKey.currentState!.validate()) {
                         final taskModel = ref.read(taskFormProvider);
-                        log('Title: ${taskModel.title}');
-                        log('Description: ${taskModel.description}');
-                        log('Due Date: ${taskModel.date}');
-                        log('Priority: ${taskModel.priority}');
-                        log('Status: ${taskModel.status}');
-                        log('Assigned User: ${taskModel.assignedUser?.firstName}');
+                        final result = await insertTask(taskModel);
+                        log(result.toString());
+                        NotificationHandler.snakBarSuccess(
+                            'Task create Successfully.😄', context);
+                        clearDropDown(ref);
+                        ref.read(taskFormProvider.notifier).clearModel();
+                        NavigationHandler.pop(context);
                       }
                     },
                     title: 'Create',
