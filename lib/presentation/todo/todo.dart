@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:task_manager/core/config/api_config.dart';
 import 'package:task_manager/core/constant/constant.dart';
+import 'package:task_manager/core/constant/enum.dart';
 import 'package:task_manager/core/model/todo_model.dart';
 import 'package:task_manager/core/notification/notification.dart';
 import 'package:task_manager/core/routes/routes.dart';
@@ -16,14 +18,27 @@ import 'package:task_manager/presentation/todo/widget/widget.dart';
 
 final formKeyTodo = GlobalKey<FormState>();
 
-class AddTodoScreen extends ConsumerWidget {
-  const AddTodoScreen({super.key});
-
+class TodoScreen extends ConsumerWidget {
+  const TodoScreen({this.todoModel, super.key});
+  final TodoModel? todoModel;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (todoModel != null) {
+        ref.read(taskFormProvider.notifier).updateTitle(todoModel?.title ?? '');
+        ref.watch(completionStatusProvider.state).state = todoModel!.completed
+            ? CompletionStatus.complete
+            : CompletionStatus.incomplete;
+        ref.read(taskFormProvider.notifier).updateAssignedUser(
+              AppDevConfig.userList.firstWhere(
+                (element) => element.id == todoModel?.userId,
+              ),
+            );
+      }
+    });
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Todo'),
+        title: Text(todoModel != null ? 'Update Todo' : 'Add Todo'),
         centerTitle: true,
       ),
       body: Padding(
@@ -34,6 +49,9 @@ class AddTodoScreen extends ConsumerWidget {
             children: [
               TextFormWidget(
                 label: 'Title',
+                controller: todoModel != null
+                    ? TextEditingController(text: todoModel?.title ?? '')
+                    : null,
                 icon: FontAwesomeIcons.t,
                 onChanged: (value) => ref
                     .read(taskFormProvider.notifier)
@@ -49,19 +67,26 @@ class AddTodoScreen extends ConsumerWidget {
                 onPressed: () async {
                   if (formKeyTodo.currentState!.validate()) {
                     final taskModel = ref.read(taskFormProvider);
-                    print(TodoModel(
-                        userId: taskModel.assignedUser?.id ?? 0,
-                        title: taskModel.title,
-                        completed: taskModel.status == 'complete'));
-                    final result = await TodoRepo().createTask(
-                        ref,
-                        TodoModel(
-                            userId: taskModel.assignedUser?.id ?? 0,
-                            title: taskModel.title,
-                            completed: taskModel.status == 'complete'));
+                    String result = todoModel != null
+                        ? await TodoRepo().updateTask(
+                            ref,
+                            todoModel!.id ?? 0,
+                            TodoModel(
+                                userId: taskModel.assignedUser?.id ?? 0,
+                                title: taskModel.title,
+                                completed: taskModel.status == 'complete'))
+                        : await TodoRepo().createTask(
+                            ref,
+                            TodoModel(
+                                userId: taskModel.assignedUser?.id ?? 0,
+                                title: taskModel.title,
+                                completed: taskModel.status == 'complete'));
                     if (result == 'success') {
                       NotificationHandler.snakBarSuccess(
-                          'Task create Successfully.😄', context);
+                          todoModel != null
+                              ? 'Task update Successfully.😄'
+                              : 'Task create Successfully.😄',
+                          context);
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         ref.read(todoNotifierProvider.notifier).getTodo(ref);
                       });
@@ -73,7 +98,7 @@ class AddTodoScreen extends ConsumerWidget {
                     NavigationHandler.pop(context);
                   }
                 },
-                title: 'Create',
+                title: todoModel != null ? 'Update' : 'Create',
                 btnColor: colorApp,
                 colorTitle: colorWhite,
               )

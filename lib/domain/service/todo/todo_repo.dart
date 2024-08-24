@@ -85,7 +85,7 @@ class TodoRepo {
     }
   }
 
-  Future<dynamic> updateTask(
+  Future<String> updateTask(
       WidgetRef ref, int id, TodoModel updatedTask) async {
     try {
       final response = await dio.put(
@@ -101,7 +101,7 @@ class TodoRepo {
 
       if (response.statusCode == 200) {
         print('Task updated successfully: ${response.toString()}');
-        return TodoModel.fromJson(response.data);
+        return 'success';
       } else {
         return response.data['error'];
       }

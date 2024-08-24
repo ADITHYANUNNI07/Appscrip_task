@@ -175,8 +175,7 @@ class _HomeScrnState extends ConsumerState<HomeScrn> {
                   backgroundColor: colorApp,
                   onPressed: () {
                     clearDropDown(ref);
-                    NavigationHandler.navigateTo(
-                        context, const AddTodoScreen());
+                    NavigationHandler.navigateTo(context, const TodoScreen());
                   },
                   child: const Icon(
                     Icons.add,
@@ -274,7 +273,10 @@ class TodoListWidget extends StatelessWidget {
                               PopupMenuItem(
                                 value: 1,
                                 child: const Text("Update"),
-                                onTap: () {},
+                                onTap: () {
+                                  NavigationHandler.navigateTo(
+                                      context, TodoScreen(todoModel: task));
+                                },
                               ),
                               PopupMenuItem(
                                 value: 2,
