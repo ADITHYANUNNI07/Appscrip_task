@@ -4,11 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:task_manager/core/constant/constant.dart';
-import 'package:task_manager/core/model/task_model.dart';
+import 'package:task_manager/core/model/todo_model.dart';
 import 'package:task_manager/core/routes/routes.dart';
 import 'package:task_manager/core/utils/color/color.dart';
 import 'package:task_manager/infrastructure/domain/demo/tast_state.dart';
-import 'package:task_manager/infrastructure/riverpod/task/task_provider.dart';
+import 'package:task_manager/infrastructure/riverpod/todo/todo_provider.dart';
 import 'package:task_manager/presentation/form/form_screen.dart';
 
 class HomeScrn extends ConsumerStatefulWidget {
@@ -23,7 +23,7 @@ class _HomeScrnState extends ConsumerState<HomeScrn> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(taskNotifierProvider.notifier).getTodo(ref);
+      ref.read(todoNotifierProvider.notifier).getTodo(ref);
     });
   }
 
@@ -44,7 +44,7 @@ class _HomeScrnState extends ConsumerState<HomeScrn> {
     }
     return Consumer(
       builder: (context, ref, child) {
-        final taskState = ref.watch(taskNotifierProvider);
+        final todoState = ref.watch(todoNotifierProvider);
         return Container(
           color: colorApp,
           child: DefaultTabController(
@@ -104,18 +104,18 @@ class _HomeScrnState extends ConsumerState<HomeScrn> {
                 body: TabBarView(
                   physics: const BouncingScrollPhysics(),
                   children: [
-                    taskState.status == TaskStateStatus.loading
+                    todoState.status == TodoStateStatus.loading
                         ? const Center(child: CircularProgressIndicator())
-                        : taskState.status == TaskStateStatus.error
+                        : todoState.status == TodoStateStatus.error
                             ? Center(
-                                child: Text('Error: ${taskState.errorMessage}'))
+                                child: Text('Error: ${todoState.errorMessage}'))
                             : ListView.builder(
-                                itemCount: taskState.tasks
+                                itemCount: todoState.tasks
                                         ?.where((task) => !task.completed)
                                         .length ??
                                     0,
                                 itemBuilder: (context, index) {
-                                  final incompleteTasks = taskState.tasks
+                                  final incompleteTasks = todoState.tasks
                                           ?.where((task) => !task.completed)
                                           .toList() ??
                                       [];
@@ -127,18 +127,18 @@ class _HomeScrnState extends ConsumerState<HomeScrn> {
                                   );
                                 },
                               ),
-                    taskState.status == TaskStateStatus.loading
+                    todoState.status == TodoStateStatus.loading
                         ? const Center(child: CircularProgressIndicator())
-                        : taskState.status == TaskStateStatus.error
+                        : todoState.status == TodoStateStatus.error
                             ? Center(
-                                child: Text('Error: ${taskState.errorMessage}'))
+                                child: Text('Error: ${todoState.errorMessage}'))
                             : ListView.builder(
-                                itemCount: taskState.tasks
+                                itemCount: todoState.tasks
                                         ?.where((task) => task.completed)
                                         .length ??
                                     0,
                                 itemBuilder: (context, index) {
-                                  final completeTasks = taskState.tasks
+                                  final completeTasks = todoState.tasks
                                           ?.where((task) => task.completed)
                                           .toList() ??
                                       [];
@@ -180,7 +180,7 @@ class TodoListWidget extends StatelessWidget {
   });
   final int index;
   final Size size;
-  final TaskModel task;
+  final TodoModel task;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -205,49 +205,42 @@ class TodoListWidget extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
                         constraints: BoxConstraints(maxWidth: size.width - 45),
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(5.0),
                         decoration: BoxDecoration(
                           color: Colors.accents[index % Colors.accents.length]
                               .withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(8.0),
+                          borderRadius: BorderRadius.circular(5.0),
                         ),
-                        child: Text(
-                          task.title,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color:
-                                Colors.accents[index % Colors.accents.length],
-                          ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CircleAvatar(
+                              radius: 15,
+                              backgroundImage:
+                                  NetworkImage(task.user?.avatar ?? ''),
+                            ),
+                            sizedBox5W,
+                            Text(
+                              "${task.user?.firstName} ${task.user?.lastName}",
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: colorBlack,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       sizedBox5H,
+                      Text(task.title)
                     ],
-                  ),
-                ),
-                Positioned(
-                  bottom: 5,
-                  right: 9,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: colorApp,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    padding: const EdgeInsets.all(10),
-                    child: Text(
-                      task.completed ? "Completed" : "Pending",
-                      style: const TextStyle(
-                        color: colorWhite,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
                   ),
                 ),
               ]))

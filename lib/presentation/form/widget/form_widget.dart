@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:task_manager/core/config/api_config.dart';
 import 'package:task_manager/core/constant/constant.dart';
 import 'package:task_manager/core/constant/enum.dart';
+import 'package:task_manager/core/model/user_model.dart';
 import 'package:task_manager/core/utils/color/color.dart';
 import 'package:task_manager/infrastructure/riverpod/form/form_provider.dart';
+import 'package:task_manager/infrastructure/riverpod/task/task_provider.dart';
 
 class PriorityDropdown extends ConsumerWidget {
   const PriorityDropdown({super.key});
@@ -22,24 +25,33 @@ class PriorityDropdown extends ConsumerWidget {
         ),
         sizedBox10H,
         DropdownButtonFormField<Priority>(
-          value: selectedPriority,
-          dropdownColor: colorWhite,
-          decoration: const InputDecoration(
-            labelText: 'Priority',
-            border: OutlineInputBorder(),
-          ),
-          items: Priority.values.map((Priority priority) {
-            return DropdownMenuItem<Priority>(
-              value: priority,
-              child: Text(priority.toString().split('.').last),
-            );
-          }).toList(),
-          onChanged: (Priority? newPriority) {
-            if (newPriority != null) {
-              ref.read(priorityProvider.state).state = newPriority;
-            }
-          },
-        ),
+            value: selectedPriority,
+            dropdownColor: colorWhite,
+            hint: const Text("Select Priority"),
+            decoration: const InputDecoration(
+              labelText: 'Priority',
+              border: OutlineInputBorder(),
+            ),
+            items: Priority.values.map((Priority priority) {
+              return DropdownMenuItem<Priority>(
+                value: priority,
+                child: Text(priority.toString().split('.').last),
+              );
+            }).toList(),
+            onChanged: (Priority? newPriority) {
+              if (newPriority != null) {
+                ref.read(priorityProvider.state).state = newPriority;
+                ref
+                    .read(taskFormProvider.notifier)
+                    .updatePriority(newPriority.toString().split('.').last);
+              }
+            },
+            validator: (value) {
+              if (value == null) {
+                return 'Please select a priority';
+              }
+              return null;
+            }),
       ],
     );
   }
@@ -63,6 +75,7 @@ class StatusDropdown extends ConsumerWidget {
         DropdownButtonFormField<Status>(
           value: selectedStatus,
           dropdownColor: colorWhite,
+          hint: const Text("Select Status"),
           decoration: const InputDecoration(
             labelText: 'Status',
             border: OutlineInputBorder(),
@@ -77,8 +90,69 @@ class StatusDropdown extends ConsumerWidget {
           onChanged: (Status? newStatus) {
             if (newStatus != null) {
               ref.read(statusProvider.state).state = newStatus;
+              ref.read(taskFormProvider.notifier).updateStatus(
+                  newStatus.toString().split('.').last.replaceAll('_', ' '));
             }
           },
+          validator: (value) {
+            if (value == null) {
+              return 'Please select a Status';
+            }
+            return null;
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class UserDropdown extends ConsumerWidget {
+  const UserDropdown({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userList = AppDevConfig.userList;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        sizedBox15H,
+        const Text(
+          'Assign to User',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+        ),
+        sizedBox10H,
+        DropdownButtonFormField<UserModel>(
+          decoration: const InputDecoration(
+            labelText: 'Assign to User',
+            border: OutlineInputBorder(),
+          ),
+          value: ref.watch(taskFormProvider).assignedUser,
+          items: userList.map((UserModel user) {
+            return DropdownMenuItem<UserModel>(
+              value: user,
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(user.avatar ?? ''),
+                  ),
+                  sizedBox5W,
+                  Text("${user.firstName} ${user.lastName}"),
+                ],
+              ),
+            );
+          }).toList(),
+          onChanged: (UserModel? user) {
+            if (user != null) {
+              ref.read(taskFormProvider.notifier).updateAssignedUser(user);
+            }
+          },
+          validator: (value) {
+            if (value == null) {
+              return 'Please select a User';
+            }
+            return null;
+          },
+          hint: const Text('Assign to User'),
         ),
       ],
     );

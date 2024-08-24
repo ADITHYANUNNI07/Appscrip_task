@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:task_manager/core/api/api_baseservice.dart';
 import 'package:task_manager/core/config/api_config.dart';
-import 'package:task_manager/core/model/task_model.dart';
+import 'package:task_manager/core/model/todo_model.dart';
 
 class TaskRepo {
   final Dio dio = Dio();
@@ -22,9 +22,24 @@ class TaskRepo {
 
       if (response.statusCode == 201 || response.statusCode == 200) {
         print('Get successful!::${response.toString()}');
-        return (response.data as List)
-            .map((map) => TaskModel.fromJson(map))
+        List<TodoModel> tasks = (response.data as List)
+            .map((map) => TodoModel.fromJson(map))
             .toList();
+
+        tasks = tasks.map((task) {
+          final user = AppDevConfig.userList.firstWhere(
+            (user) => user.id == task.userId,
+          );
+          return TodoModel(
+            userId: task.userId,
+            id: task.id,
+            title: task.title,
+            completed: task.completed,
+            user: user,
+          );
+        }).toList();
+
+        return tasks;
       } else {
         return response.data['error'];
       }

@@ -1,28 +1,46 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:task_manager/infrastructure/domain/demo/tast_state.dart';
-import 'package:task_manager/infrastructure/domain/service/task/task_repo.dart';
+import 'package:task_manager/core/model/task_model.dart';
+import 'package:task_manager/core/model/user_model.dart';
 
-final taskRepoProvider = Provider<TaskRepo>((ref) {
-  return TaskRepo();
-});
+class TaskFormNotifier extends StateNotifier<TaskModel> {
+  TaskFormNotifier()
+      : super(TaskModel(
+            title: '', description: '', priority: 'Low', status: 'To-Do'));
 
-class TaskNotifier extends StateNotifier<TaskState> {
-  final TaskRepo taskRepo;
-  TaskNotifier(this.taskRepo) : super(TaskState.initial());
+  void updateTitle(String title) {
+    state = state.copyWith(title: title);
+  }
 
-  Future<void> getTodo(WidgetRef ref) async {
-    state = TaskState.loading();
-    final result = await taskRepo.getTodo(ref);
-    if (result == null || result is String) {
-      state = TaskState.error(result ?? '');
-    } else {
-      state = TaskState.success(result);
+  void updateDescription(String description) {
+    state = state.copyWith(description: description);
+  }
+
+  void updateDate(DateTime date) {
+    state = state.copyWith(date: date);
+  }
+
+  void updatePriority(String priority) {
+    state = state.copyWith(priority: priority);
+  }
+
+  void updateStatus(String status) {
+    state = state.copyWith(status: status);
+  }
+
+  void updateAssignedUser(UserModel user) {
+    state = state.copyWith(assignedUser: user);
+  }
+
+  bool validateForm() {
+    if (state.title.isEmpty ||
+        state.description.isEmpty ||
+        state.assignedUser == null) {
+      return false;
     }
+    return true;
   }
 }
 
-final taskNotifierProvider =
-    StateNotifierProvider<TaskNotifier, TaskState>((ref) {
-  final taskRepo = ref.watch(taskRepoProvider);
-  return TaskNotifier(taskRepo);
-});
+final taskFormProvider = StateNotifierProvider<TaskFormNotifier, TaskModel>(
+  (ref) => TaskFormNotifier(),
+);

@@ -5,8 +5,14 @@ class UserModel {
   final String? passwordError;
   final int? id;
   final String? name;
+  final String? firstName;
+  final String? lastName;
+  final String? avatar;
 
   UserModel({
+    this.firstName,
+    this.lastName,
+    this.avatar,
     this.id,
     this.name,
     this.email = '',
@@ -33,6 +39,15 @@ class UserModel {
     return emailError == null && passwordError == null;
   }
 
+  factory UserModel.userListfromJson(Map<String, dynamic> json) {
+    return UserModel(
+      id: json['id'],
+      email: json['email'],
+      firstName: json['first_name'],
+      lastName: json['last_name'],
+      avatar: json['avatar'],
+    );
+  }
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       id: json['id'],

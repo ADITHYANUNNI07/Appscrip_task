@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:task_manager/core/constant/constant.dart';
+import 'package:task_manager/infrastructure/riverpod/task/task_provider.dart';
 
 final dobProvider = StateProvider<DateTime?>((ref) => null);
 
@@ -33,6 +34,11 @@ class DatePickerWidget extends ConsumerWidget {
                 ? DateFormat('dd MMM yyyy').format(selectedDate)
                 : '',
           ),
+          validator: (value) => value!.isEmpty
+              ? "Please Select Due Date"
+              : selectedDate != null && selectedDate.isBefore(DateTime.now())
+                  ? "Due Date cannot be before the current date"
+                  : null,
           onTap: () async {
             DateTime? pickedDate = await showDatePicker(
                 context: context,
@@ -41,6 +47,7 @@ class DatePickerWidget extends ConsumerWidget {
                 lastDate: DateTime(2200));
             if (pickedDate != null) {
               ref.read(dobProvider.state).state = pickedDate;
+              ref.read(taskFormProvider.notifier).updateDate(pickedDate);
             }
           },
         ),

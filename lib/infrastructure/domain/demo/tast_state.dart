@@ -1,21 +1,21 @@
-import 'package:task_manager/core/model/task_model.dart';
+import 'package:task_manager/core/model/todo_model.dart';
 
-enum TaskStateStatus { initial, loading, success, error }
+enum TodoStateStatus { initial, loading, success, error }
 
-class TaskState {
-  final TaskStateStatus status;
-  final List<TaskModel>? tasks;
+class TodoState {
+  final TodoStateStatus status;
+  final List<TodoModel>? tasks;
   final String? errorMessage;
 
-  TaskState._({required this.status, this.tasks, this.errorMessage});
+  TodoState._({required this.status, this.tasks, this.errorMessage});
 
-  factory TaskState.initial() => TaskState._(status: TaskStateStatus.initial);
+  factory TodoState.initial() => TodoState._(status: TodoStateStatus.initial);
 
-  factory TaskState.loading() => TaskState._(status: TaskStateStatus.loading);
+  factory TodoState.loading() => TodoState._(status: TodoStateStatus.loading);
 
-  factory TaskState.success(List<TaskModel> tasks) =>
-      TaskState._(status: TaskStateStatus.success, tasks: tasks);
+  factory TodoState.success(List<TodoModel> tasks) =>
+      TodoState._(status: TodoStateStatus.success, tasks: tasks);
 
-  factory TaskState.error(String errorMessage) =>
-      TaskState._(status: TaskStateStatus.error, errorMessage: errorMessage);
+  factory TodoState.error(String errorMessage) =>
+      TodoState._(status: TodoStateStatus.error, errorMessage: errorMessage);
 }

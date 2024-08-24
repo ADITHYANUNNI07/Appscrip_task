@@ -1,31 +1,37 @@
+import 'package:task_manager/core/model/user_model.dart';
+
 class TaskModel {
-  final int userId;
-  final int id;
   final String title;
-  final bool completed;
+  final String description;
+  final DateTime? date;
+  final String priority;
+  final String status;
+  final UserModel? assignedUser;
 
   TaskModel({
-    required this.userId,
-    required this.id,
     required this.title,
-    required this.completed,
+    required this.description,
+    this.date,
+    required this.priority,
+    required this.status,
+    this.assignedUser,
   });
 
-  factory TaskModel.fromJson(Map<String, dynamic> json) {
+  TaskModel copyWith({
+    String? title,
+    String? description,
+    DateTime? date,
+    String? priority,
+    String? status,
+    UserModel? assignedUser,
+  }) {
     return TaskModel(
-      userId: json['userId'] as int,
-      id: json['id'] as int,
-      title: json['title'] as String,
-      completed: json['completed'] as bool,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      date: date ?? this.date,
+      priority: priority ?? this.priority,
+      status: status ?? this.status,
+      assignedUser: assignedUser ?? this.assignedUser,
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'userId': userId,
-      'id': id,
-      'title': title,
-      'completed': completed,
-    };
   }
 }
