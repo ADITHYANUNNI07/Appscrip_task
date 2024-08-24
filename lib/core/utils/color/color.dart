@@ -9,6 +9,7 @@ const Color colorWhite = Colors.white;
 const Color colorBlack = Colors.black;
 const Color lightBlack = Color(0xFF282828);
 const Color colorRed = Colors.red;
+const Color colorYellow = Colors.yellow;
 const Color colorGreen = Colors.green;
 const colorGrey = Colors.grey;
 const MaterialColor customPrimaryColor = MaterialColor(0xFFfa824c, <int, Color>{
@@ -23,3 +24,8 @@ const MaterialColor customPrimaryColor = MaterialColor(0xFFfa824c, <int, Color>{
   800: Color(0xFFfa824c),
   900: Color(0xFFfa824c),
 });
+final priorityColors = {
+  'high': colorRed,
+  'medium': colorYellow,
+  'low': colorGreen,
+};

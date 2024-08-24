@@ -13,7 +13,7 @@ import 'package:task_manager/core/widget/text_form_field.dart';
 import 'package:task_manager/infrastructure/riverpod/auth/auth_provider.dart';
 import 'package:task_manager/infrastructure/riverpod/password_provider.dart';
 import 'package:task_manager/infrastructure/riverpod/user_model_notifier.dart';
-import 'package:task_manager/presentation/home/home.dart';
+import 'package:task_manager/presentation/dashboard/dashboard_screen.dart';
 import 'package:task_manager/presentation/register/register.dart';
 
 class LoginScrn extends ConsumerWidget {
@@ -31,7 +31,7 @@ class LoginScrn extends ConsumerWidget {
 
     ref.listen<AuthState>(authNotifierProvider, (previous, next) {
       if (next == AuthState.success) {
-        NavigationHandler.navigateOff(context, const HomeScrn());
+        NavigationHandler.navigateOff(context, const DashboardScrn());
       } else if (next == AuthState.error) {
         log('Error: $error');
         Fluttertoast.showToast(msg: error ?? 'Sign-up failed');

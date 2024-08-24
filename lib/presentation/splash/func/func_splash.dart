@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:task_manager/core/config/api_config.dart';
 import 'package:task_manager/infrastructure/domain/service/users/uses_repo.dart';
 import 'package:task_manager/infrastructure/helper/shared_preference.dart';
-import 'package:task_manager/presentation/home/home.dart';
+import 'package:task_manager/presentation/dashboard/dashboard_screen.dart';
 import 'package:task_manager/presentation/register/register.dart';
 
 void splashtime(BuildContext context, WidgetRef ref) async {
@@ -24,7 +24,7 @@ void splashtime(BuildContext context, WidgetRef ref) async {
             AppDevConfig.userList = await UsesRepo().fetchAllUsers();
             print(AppDevConfig.userList);
             Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const HomeScrn()),
+              MaterialPageRoute(builder: (context) => const DashboardScrn()),
             );
           }
         },

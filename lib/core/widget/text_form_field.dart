@@ -49,7 +49,7 @@ class TextFormWidget extends StatelessWidget {
             ? Row(
                 children: [
                   Text(
-                    label ?? '',
+                    label,
                     style: const TextStyle(
                         fontSize: 18, fontWeight: FontWeight.w600),
                   ),
