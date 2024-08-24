@@ -52,6 +52,9 @@ dependencies:
   toasty_box: ^1.0.4
   google_nav_bar: ^5.0.6
   flutter_popup: ^3.3.0
+  redacted: ^1.0.12
+  liquid_swipe: ^3.1.0
+  smooth_page_indicator: ^1.2.0+3
 
 dev_dependencies:
   flutter_test:

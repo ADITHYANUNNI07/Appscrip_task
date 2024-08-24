@@ -5,14 +5,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:task_manager/core/constant/constant.dart';
 import 'package:task_manager/core/model/todo_model.dart';
-import 'package:task_manager/core/notification/notification.dart';
 import 'package:task_manager/core/routes/routes.dart';
 import 'package:task_manager/core/utils/color/color.dart';
+import 'package:task_manager/core/widget/alert_box.dart';
 import 'package:task_manager/domain/demo/tast_state.dart';
-import 'package:task_manager/domain/service/todo/todo_repo.dart';
 import 'package:task_manager/infrastructure/riverpod/todo/todo_provider.dart';
 import 'package:task_manager/presentation/form/widget/form_widget.dart';
 import 'package:task_manager/presentation/todo/todo.dart';
+import 'package:redacted/redacted.dart';
 
 class HomeScrn extends ConsumerStatefulWidget {
   const HomeScrn({super.key});
@@ -73,7 +73,10 @@ class _HomeScrnState extends ConsumerState<HomeScrn> {
                             CircleAvatar(
                               backgroundColor: colorApp,
                               child: IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    AlertBoxHandler.logoutAlertBox(
+                                        context, ref);
+                                  },
                                   icon: const Icon(
                                     Icons.logout,
                                     color: colorWhite,
@@ -122,7 +125,11 @@ class _HomeScrnState extends ConsumerState<HomeScrn> {
                   physics: const BouncingScrollPhysics(),
                   children: [
                     todoState.status == TodoStateStatus.loading
-                        ? const Center(child: CircularProgressIndicator())
+                        ? ListView(
+                            children: List.generate(
+                            10,
+                            (index) => TodoListWidgetShimmer(index: index),
+                          ))
                         : todoState.status == TodoStateStatus.error
                             ? Center(
                                 child: Text('Error: ${todoState.errorMessage}'))
@@ -146,7 +153,11 @@ class _HomeScrnState extends ConsumerState<HomeScrn> {
                                 },
                               ),
                     todoState.status == TodoStateStatus.loading
-                        ? const Center(child: CircularProgressIndicator())
+                        ? ListView(
+                            children: List.generate(
+                            10,
+                            (index) => TodoListWidgetShimmer(index: index),
+                          ))
                         : todoState.status == TodoStateStatus.error
                             ? Center(
                                 child: Text('Error: ${todoState.errorMessage}'))
@@ -282,62 +293,8 @@ class TodoListWidget extends StatelessWidget {
                                 value: 2,
                                 child: const Text("Delete"),
                                 onTap: () {
-                                  showDialog<String>(
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        AlertDialog(
-                                      title: const SizedBox(
-                                          width: 200,
-                                          child: Text(
-                                            'Delete this Task?',
-                                            textAlign: TextAlign.center,
-                                          )),
-                                      content: const SizedBox(
-                                        width: 200,
-                                        child: Text(
-                                          "You won't be able to recover this task after deleting it.",
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                      actionsAlignment:
-                                          MainAxisAlignment.center,
-                                      actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context, 'Cancel'),
-                                          child: const Text('Cancel'),
-                                        ),
-                                        ElevatedButton(
-                                          style: const ButtonStyle(
-                                            foregroundColor:
-                                                MaterialStatePropertyAll(
-                                                    Colors.red),
-                                          ),
-                                          onPressed: () async {
-                                            final result = await TodoRepo()
-                                                .deleteTodo(ref, task);
-                                            if (result == 'success') {
-                                              NotificationHandler.snakBarSuccess(
-                                                  'Task Delete SuccessFully',
-                                                  context);
-                                              WidgetsBinding.instance
-                                                  .addPostFrameCallback((_) {
-                                                ref
-                                                    .read(todoNotifierProvider
-                                                        .notifier)
-                                                    .getTodo(ref);
-                                              });
-                                            } else {
-                                              NotificationHandler.snakBarError(
-                                                  result, context);
-                                            }
-                                            Navigator.pop(context);
-                                          },
-                                          child: const Text('Delete'),
-                                        ),
-                                      ],
-                                    ),
-                                  );
+                                  AlertBoxHandler.deleteTodoAlertBox(
+                                      context, ref, task);
                                 },
                               ),
                             ],
@@ -350,6 +307,81 @@ class TodoListWidget extends StatelessWidget {
                   ),
                 ),
               ]))
+        ]));
+  }
+}
+
+class TodoListWidgetShimmer extends StatelessWidget {
+  const TodoListWidgetShimmer({
+    super.key,
+    required this.index,
+  });
+  final int index;
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    return Container(
+        padding: const EdgeInsets.all(10),
+        child: Column(children: [
+          Container(
+            height: size.height * 0.15,
+            decoration: BoxDecoration(
+              color: colorWhite,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            width: size.width,
+            child: Stack(children: [
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              height: 30,
+                              width: 30,
+                            ),
+                            sizedBox5W,
+                            const Text(
+                              "helloooooooooo",
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: colorBlack,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Spacer(),
+                        Column(
+                          children: List.generate(
+                            3,
+                            (index) => Container(height: 7, width: 7),
+                          ),
+                        )
+                      ],
+                    ),
+                    sizedBox10H,
+                    Container(height: 10, width: 100),
+                    sizedBox10H,
+                    Container(height: 10, width: 200),
+                    sizedBox10H,
+                    Container(height: 10, width: 300),
+                  ],
+                ),
+              ),
+            ]),
+          ).redacted(
+              context: context,
+              redact: true,
+              configuration: RedactedConfiguration(
+                animationDuration: const Duration(milliseconds: 800),
+              ))
         ]));
   }
 }

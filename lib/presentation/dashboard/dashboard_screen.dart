@@ -30,13 +30,13 @@ class DashboardScrn extends StatelessWidget {
           List<Widget> pages = [
             const HomeScrn(),
             const TaskScrn(),
-            const SearchScrn(),
+            // const SearchScrn(),
           ];
 
           return Scaffold(
             body: pages[provider.index],
             bottomNavigationBar: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 8),
               child: GNav(
                 onTabChange: (index) {
                   provider.setIndex(index);
@@ -57,10 +57,10 @@ class DashboardScrn extends StatelessWidget {
                     icon: CupertinoIcons.list_bullet,
                     text: 'Task',
                   ),
-                  GButton(
-                    icon: CupertinoIcons.search,
-                    text: 'Search',
-                  ),
+                  // GButton(
+                  //   icon: CupertinoIcons.search,
+                  //   text: 'Search',
+                  // ),
                 ],
               ),
             ),

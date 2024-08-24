@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:task_manager/core/constant/constant.dart';
+import 'package:task_manager/core/model/task_model.dart';
 import 'package:task_manager/core/notification/notification.dart';
 import 'package:task_manager/core/routes/routes.dart';
 import 'package:task_manager/core/utils/color/color.dart';
@@ -13,6 +14,7 @@ import 'package:task_manager/core/widget/text_form_field.dart';
 import 'package:task_manager/db/database_sqflite.dart';
 import 'package:task_manager/infrastructure/riverpod/task/task_provider.dart';
 import 'package:task_manager/presentation/form/widget/form_widget.dart';
+import 'package:task_manager/presentation/task/task_screen.dart';
 
 final formKey = GlobalKey<FormState>();
 
@@ -66,6 +68,9 @@ class FormScreen extends ConsumerWidget {
                         final taskModel = ref.read(taskFormProvider);
                         final result = await insertTask(taskModel);
                         log(result.toString());
+
+                        List<TaskModel> tasks = await fetchAllTasks();
+                        ref.read(taskProvider.notifier).addTask(tasks);
                         NotificationHandler.snakBarSuccess(
                             'Task create Successfully.😄', context);
                         clearDropDown(ref);
