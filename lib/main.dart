@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:task_manager/core/utils/color/color.dart';
 import 'package:task_manager/db/database_sqflite.dart';
-import 'package:task_manager/presentation/splash/splash.dart';
+import 'package:task_manager/presentation/splash/splash_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() async {

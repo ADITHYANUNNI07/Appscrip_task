@@ -110,13 +110,11 @@ Future<List<TodoModel>> fetchTodos() async {
       (user) => user.id == task.userId,
     );
     return TodoModel(
-      userId: task.userId,
-      id: task.id,
-      title: task.title,
-      completed: task.completed,
-      user: user,
-    );
+        userId: task.userId,
+        id: task.id,
+        title: task.title,
+        completed: task.completed,
+        user: user);
   }).toList();
-
   return tasks;
 }

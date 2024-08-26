@@ -6,8 +6,8 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:task_manager/core/routes/routes.dart';
 import 'package:task_manager/core/utils/color/color.dart';
 import 'package:task_manager/core/widget/elevated_btn.dart';
-import 'package:task_manager/presentation/login/login.dart';
-import 'package:task_manager/presentation/register/register.dart';
+import 'package:task_manager/presentation/login/login_screen.dart';
+import 'package:task_manager/presentation/register/register._screendart';
 
 class WelcomeScrn extends StatefulWidget {
   const WelcomeScrn({super.key});

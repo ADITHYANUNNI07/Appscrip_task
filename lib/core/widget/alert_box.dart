@@ -6,7 +6,7 @@ import 'package:task_manager/core/routes/routes.dart';
 import 'package:task_manager/domain/service/todo/todo_repo.dart';
 import 'package:task_manager/infrastructure/helper/shared_preference.dart';
 import 'package:task_manager/infrastructure/riverpod/todo/todo_provider.dart';
-import 'package:task_manager/presentation/login/login.dart';
+import 'package:task_manager/presentation/login/login_screen.dart';
 
 class AlertBoxHandler {
   static deleteTodoAlertBox(

@@ -5,11 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:observe_internet_connectivity/observe_internet_connectivity.dart';
-import 'package:task_manager/core/config/api_config.dart';
 import 'package:task_manager/core/constant/constant.dart';
 import 'package:task_manager/core/constant/enum.dart';
 import 'package:task_manager/core/net/net.dart';
-import 'package:task_manager/core/notification/notification.dart';
 import 'package:task_manager/core/routes/routes.dart';
 import 'package:task_manager/core/utils/color/color.dart';
 import 'package:task_manager/core/widget/elevated_btn.dart';
@@ -19,7 +17,7 @@ import 'package:task_manager/infrastructure/riverpod/password_provider.dart';
 import 'package:task_manager/infrastructure/riverpod/user_model_notifier.dart';
 import 'package:task_manager/presentation/dashboard/dashboard_screen.dart';
 import 'package:task_manager/presentation/login/func/func_login.dart';
-import 'package:task_manager/presentation/register/register.dart';
+import 'package:task_manager/presentation/register/register._screendart';
 
 class LoginScrn extends ConsumerWidget {
   const LoginScrn({super.key});
