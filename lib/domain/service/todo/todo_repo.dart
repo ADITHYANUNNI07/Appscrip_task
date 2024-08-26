@@ -1,10 +1,12 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:task_manager/core/api/api_baseservice.dart';
 import 'package:task_manager/core/config/api_config.dart';
 import 'package:task_manager/core/model/todo_model.dart';
+import 'package:task_manager/domain/service/users/uses_repo.dart';
 
 class TodoRepo {
   final Dio dio = Dio();
@@ -20,7 +22,7 @@ class TodoRepo {
           },
         ),
       );
-
+      AppDevConfig.userList = await UsesRepo().fetchAllUsers();
       if (response.statusCode == 201 || response.statusCode == 200) {
         print('Get successful!::${response.toString()}');
         List<TodoModel> tasks = (response.data as List)

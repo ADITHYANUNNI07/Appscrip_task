@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:task_manager/core/utils/color/color.dart';
 import 'package:task_manager/presentation/home/home.dart';
-import 'package:task_manager/presentation/search/search.dart';
 import 'package:task_manager/presentation/task/task_screen.dart';
 
 class PageIndexProvider with ChangeNotifier {
