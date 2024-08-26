@@ -9,6 +9,7 @@ class AppDevConfig {
   static String companyName = '';
   static const String baseURLTodo = 'https://jsonplaceholder.typicode.com/';
   static List<UserModel> userList = [];
+  static bool isNetwork = true;
 }
 
 void handleApiError(String source, DioException error) {

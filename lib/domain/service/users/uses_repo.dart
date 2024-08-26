@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:task_manager/core/config/api_config.dart';
 import 'package:task_manager/core/model/user_model.dart';
@@ -17,8 +19,22 @@ class UsesRepo {
       } else {
         throw Exception('Failed to load users');
       }
+    } on DioError catch (dioError) {
+      if (dioError.error is SocketException) {
+        throw Exception(
+            'Network error: Please check your internet connection.');
+      } else if (dioError.type == DioErrorType.connectionTimeout) {
+        throw Exception('Connection timed out. Please try again.');
+      } else if (dioError.type == DioErrorType.receiveTimeout) {
+        throw Exception('Receive timeout in connection. Please try again.');
+      } else if (dioError.type == DioErrorType.badResponse) {
+        throw Exception(
+            'Received invalid status code: ${dioError.response?.statusCode}');
+      } else {
+        throw Exception('Failed to load users: ${dioError.message}');
+      }
     } catch (e) {
-      throw Exception('Failed to load users: $e');
+      throw Exception('An unexpected error occurred: $e');
     }
   }
 

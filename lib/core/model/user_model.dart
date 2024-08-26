@@ -54,6 +54,16 @@ class UserModel {
       name: json['name'],
     );
   }
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'email': email,
+      'first_name': firstName,
+      'last_name': lastName,
+      'avatar': avatar,
+    };
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'email': email,

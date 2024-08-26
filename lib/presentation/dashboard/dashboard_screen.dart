@@ -2,9 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:task_manager/core/net/net.dart';
+import 'package:task_manager/core/notification/notification.dart';
 import 'package:task_manager/core/utils/color/color.dart';
 import 'package:task_manager/presentation/home/home.dart';
 import 'package:task_manager/presentation/task/task_screen.dart';
+import 'package:observe_internet_connectivity/observe_internet_connectivity.dart';
 
 class PageIndexProvider with ChangeNotifier {
   int _index = 0;
@@ -32,35 +35,42 @@ class DashboardScrn extends StatelessWidget {
             // const SearchScrn(),
           ];
 
-          return Scaffold(
-            body: pages[provider.index],
-            bottomNavigationBar: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 8),
-              child: GNav(
-                onTabChange: (index) {
-                  provider.setIndex(index);
-                },
-                tabBackgroundColor: colorApp,
-                activeColor: colorWhite,
-                padding: const EdgeInsets.all(10),
-                tabActiveBorder: Border.all(
-                  color: const Color(0xFF773BFF).withOpacity(0.5),
+          return InternetConnectivityListener(
+            connectivityListener:
+                (BuildContext context, bool hasInternetAccess) {
+              networkResponseFun(context, hasInternetAccess);
+            },
+            child: Scaffold(
+              body: pages[provider.index],
+              bottomNavigationBar: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 50, vertical: 8),
+                child: GNav(
+                  onTabChange: (index) {
+                    provider.setIndex(index);
+                  },
+                  tabBackgroundColor: colorApp,
+                  activeColor: colorWhite,
+                  padding: const EdgeInsets.all(10),
+                  tabActiveBorder: Border.all(
+                    color: const Color(0xFF773BFF).withOpacity(0.5),
+                  ),
+                  tabs: const [
+                    GButton(
+                      iconActiveColor: colorWhite,
+                      icon: CupertinoIcons.house_alt,
+                      text: 'Home',
+                    ),
+                    GButton(
+                      icon: CupertinoIcons.list_bullet,
+                      text: 'Task',
+                    ),
+                    // GButton(
+                    //   icon: CupertinoIcons.search,
+                    //   text: 'Search',
+                    // ),
+                  ],
                 ),
-                tabs: const [
-                  GButton(
-                    iconActiveColor: colorWhite,
-                    icon: CupertinoIcons.house_alt,
-                    text: 'Home',
-                  ),
-                  GButton(
-                    icon: CupertinoIcons.list_bullet,
-                    text: 'Task',
-                  ),
-                  // GButton(
-                  //   icon: CupertinoIcons.search,
-                  //   text: 'Search',
-                  // ),
-                ],
               ),
             ),
           );

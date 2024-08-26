@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:task_manager/core/config/api_config.dart';
+import 'package:task_manager/db/database_sqflite.dart';
 import 'package:task_manager/domain/demo/tast_state.dart';
 import 'package:task_manager/domain/service/todo/todo_repo.dart';
 
@@ -12,10 +14,14 @@ class TodoNotifier extends StateNotifier<TodoState> {
 
   Future<void> getTodo(WidgetRef ref) async {
     state = TodoState.loading();
-    final result = await todoRepo.getTodo(ref);
+    final result = AppDevConfig.isNetwork
+        ? await todoRepo.getTodo(ref)
+        : await fetchTodos();
+
     if (result == null || result is String) {
       state = TodoState.error(result ?? '');
     } else {
+      await insertTodos(result);
       state = TodoState.success(result);
     }
   }

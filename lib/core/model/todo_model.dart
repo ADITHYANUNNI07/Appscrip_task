@@ -32,4 +32,13 @@ class TodoModel {
       'completed': completed,
     };
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'userId': userId,
+      'id': id,
+      'title': title,
+      'completed': completed ? 1 : 0,
+    };
+  }
 }
